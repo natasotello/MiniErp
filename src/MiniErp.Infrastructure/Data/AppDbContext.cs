@@ -13,5 +13,16 @@ namespace MiniErp.Infrastructure.Data
         }
 
         public DbSet<Produto> Produtos { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Produto>(entity =>
+            {
+                entity.Property(p => p.Sku).IsRequired().HasMaxLength(30);
+                entity.Property(p => p.Nome).IsRequired().HasMaxLength(150);
+                entity.Property(p => p.PrecoVenda).HasPrecision(18, 2);
+                entity.HasIndex(p => p.Sku).IsUnique();
+            });
+        }
     }
 }
