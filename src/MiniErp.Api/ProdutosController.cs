@@ -53,12 +53,26 @@ namespace MiniErp.Api.Controllers
                 return NotFound();
             }
 
-            produto.Id = produtoAtualizado.Id;
             produto.Sku = produtoAtualizado.Sku;
             produto.Nome = produtoAtualizado.Nome;
             produto.PrecoVenda = produtoAtualizado.PrecoVenda;
             produto.EstoqueAtual = produtoAtualizado.EstoqueAtual;
             produto.Ativo = produtoAtualizado.Ativo;
+
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult DeletarProduto(int id)
+        {
+            var produto = _produtos.FirstOrDefault(p => p.Id == id);
+
+            if(produto == null)
+            {
+                return NotFound();
+            }
+
+            _produtos.Remove(produto);
 
             return NoContent();
         }
