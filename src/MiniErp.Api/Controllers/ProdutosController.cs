@@ -37,14 +37,16 @@ namespace MiniErp.Api.Controllers
             return Ok(produto);
         }
 
-        //[HttpPost]
-        //public ActionResult<Produto> CriarProduto(Produto produto)
-        //{
-        //    produto.Id = _produtos.Max(p => p.Id) + 1;
-        //    _produtos.Add(produto);
+        [HttpPost]
+        public async Task<ActionResult<Produto>> CriarProduto(Produto produto)
+        {
+            _context.Produtos.Add(produto);
+            await _context.SaveChangesAsync();
 
-        //    return CreatedAtAction(nameof(BuscarPorId), new { id = produto.Id }, produto);
-        //}
+            return CreatedAtAction(nameof(BuscarPorId), new { id = produto.Id }, produto);
+        }
+
+        
 
         //[HttpPut("{id}")]
         //public IActionResult AtualizarProduto(int id, Produto produtoAtualizado)
