@@ -4,7 +4,7 @@ using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using MiniErp.Domain.Entities;
 
-namespace MiniErp.Api
+namespace MiniErp.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
@@ -33,5 +33,16 @@ namespace MiniErp.Api
 
             return Ok(produto);
         }
+
+        [HttpPost]
+        public ActionResult<Produto> CriarProduto(Produto produto)
+        {
+            produto.Id = _produtos.Max(p => p.Id) + 1;
+            _produtos.Add(produto);
+
+            return CreatedAtAction(nameof(BuscarPorId), new { id = produto.Id }, produto);
+        }
+
+
     }
-}
+};
