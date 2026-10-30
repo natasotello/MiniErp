@@ -43,6 +43,24 @@ namespace MiniErp.Api.Controllers
             return CreatedAtAction(nameof(BuscarPorId), new { id = produto.Id }, produto);
         }
 
+        [HttpPut("{id}")]
+        public IActionResult AtualizarProduto(int id, Produto produtoAtualizado)
+        {
+            var produto = _produtos.FirstOrDefault(p => p.Id == id);
 
+            if(produto == null)
+            {
+                return NotFound();
+            }
+
+            produto.Id = produtoAtualizado.Id;
+            produto.Sku = produtoAtualizado.Sku;
+            produto.Nome = produtoAtualizado.Nome;
+            produto.PrecoVenda = produtoAtualizado.PrecoVenda;
+            produto.EstoqueAtual = produtoAtualizado.EstoqueAtual;
+            produto.Ativo = produtoAtualizado.Ativo;
+
+            return NoContent();
+        }
     }
 };
