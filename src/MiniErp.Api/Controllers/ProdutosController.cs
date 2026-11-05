@@ -29,7 +29,7 @@ namespace MiniErp.Api.Controllers
         {
             var produto = await _context.Produtos.FirstOrDefaultAsync(p => p.Id == id);
 
-            if(produto == null)
+            if (produto == null)
             {
                 return NotFound();
             }
@@ -46,26 +46,36 @@ namespace MiniErp.Api.Controllers
             return CreatedAtAction(nameof(BuscarPorId), new { id = produto.Id }, produto);
         }
 
-        
 
-        //[HttpPut("{id}")]
-        //public IActionResult AtualizarProduto(int id, Produto produtoAtualizado)
-        //{
-        //    var produto = _produtos.FirstOrDefault(p => p.Id == id);
 
-        //    if(produto == null)
-        //    {
-        //        return NotFound();
-        //    }
+        [HttpPut("{id}")]
+        public async Task<IActionResult> AutalizarPrtoduto(int id, Produto ProdutoAtualizado)
+        {
+            if(id != ProdutoAtualizado.Id)
+            {
+                return BadRequest("O ID da URL deve ser igual ao ID informado no corpo.");
+            }
 
-        //    produto.Sku = produtoAtualizado.Sku;
-        //    produto.Nome = produtoAtualizado.Nome;
-        //    produto.PrecoVenda = produtoAtualizado.PrecoVenda;
-        //    produto.EstoqueAtual = produtoAtualizado.EstoqueAtual;
-        //    produto.Ativo = produtoAtualizado.Ativo;
+            var produto = await _context.Produtos.FirstOrDefaultAsync(p => p.Id == id);
 
-        //    return NoContent();
-        //}
+            if(produto == null)
+            {
+                return NotFound();
+            }
+
+            produto.Sku = ProdutoAtualizado.Sku;
+            produto.Nome = ProdutoAtualizado.Nome;
+            produto.PrecoVenda = ProdutoAtualizado.PrecoVenda;
+            produto.EstoqueAtual = ProdutoAtualizado.EstoqueAtual;
+            produto.Ativo = ProdutoAtualizado.Ativo;
+
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+
+
 
         //[HttpDelete("{id}")]
         //public IActionResult DeletarProduto(int id)
