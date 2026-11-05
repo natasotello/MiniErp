@@ -74,22 +74,20 @@ namespace MiniErp.Api.Controllers
             return NoContent();
         }
 
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeletarProduto(int id)
+        {
+            var produto = await _context.Produtos.FirstOrDefaultAsync(p => p.Id == id);
 
+            if(produto == null)
+            {
+                return NotFound();
+            }
 
+            _context.Produtos.Remove(produto);
+            await _context.SaveChangesAsync();
 
-        //[HttpDelete("{id}")]
-        //public IActionResult DeletarProduto(int id)
-        //{
-        //    var produto = _produtos.FirstOrDefault(p => p.Id == id);
-
-        //    if(produto == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    _produtos.Remove(produto);
-
-        //    return NoContent();
-        //}
+            return NoContent();
+        }
     }
 };
