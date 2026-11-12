@@ -2,6 +2,7 @@
 using MiniErp.Domain.Entities;
 using MiniErp.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using MiniErp.Api.Dtos;
 
 namespace MiniErp.Api.Controllers
 {
@@ -17,15 +18,26 @@ namespace MiniErp.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Produto>>> Listar()
+        public async Task<ActionResult<IEnumerable<ProdutoResponse>>> Listar()
         {
             var produtos = await _context.Produtos.ToListAsync();
 
-            return Ok(produtos);
+            var response = produtos.Select(p => new ProdutoResponse
+            {
+                Id = p.Id,
+                Sku = p.Sku,
+                Nome = p.Nome,
+                PrecoVenda = p.PrecoVenda,
+                EstoqueAtual = p.EstoqueAtual,
+                Ativo = p.Ativo
+
+            }).ToList();
+
+            return Ok(response);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Produto>> BuscarPorId(int id)
+        public async Task<ActionResult<ProdutoResponse>> BuscarPorId(int id)
         {
             var produto = await _context.Produtos.FirstOrDefaultAsync(p => p.Id == id);
 
@@ -34,27 +46,50 @@ namespace MiniErp.Api.Controllers
                 return NotFound();
             }
 
-            return Ok(produto);
+            var response = new ProdutoResponse
+            {
+                Id = produto.Id,
+                Sku = produto.Sku,
+                Nome = produto.Nome,
+                PrecoVenda = produto.PrecoVenda,
+                EstoqueAtual = produto.EstoqueAtual,
+                Ativo = produto.Ativo
+            };
+
+            return Ok(response);
         }
 
         [HttpPost]
-        public async Task<ActionResult<Produto>> CriarProduto(Produto produto)
+        public async Task<ActionResult<ProdutoResponse>> CriarProduto(CriarProdutoRequest request)
         {
+            var produto = new Produto
+            {
+                Sku = request.Sku,
+                Nome = request.Nome,
+                PrecoVenda = request.PrecoVenda,
+                EstoqueAtual = request.EstoqueAtual,
+                Ativo = request.Ativo
+            };
+
             _context.Produtos.Add(produto);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(BuscarPorId), new { id = produto.Id }, produto);
+            var response = new ProdutoResponse
+            {
+                Id = produto.Id,
+                Sku = produto.Sku,
+                Nome = produto.Nome,
+                PrecoVenda = produto.PrecoVenda,
+                EstoqueAtual = produto.EstoqueAtual,
+                Ativo = produto.Ativo
+            };
+
+            return CreatedAtAction(nameof(BuscarPorId), new { id = produto.Id }, response);
         }
 
-
-
         [HttpPut("{id}")]
-        public async Task<IActionResult> AutalizarPrtoduto(int id, Produto ProdutoAtualizado)
+        public async Task<IActionResult> AtualizarProduto(int id, AtualizarProdutoRequest request)
         {
-            if(id != ProdutoAtualizado.Id)
-            {
-                return BadRequest("O ID da URL deve ser igual ao ID informado no corpo.");
-            }
 
             var produto = await _context.Produtos.FirstOrDefaultAsync(p => p.Id == id);
 
@@ -63,11 +98,11 @@ namespace MiniErp.Api.Controllers
                 return NotFound();
             }
 
-            produto.Sku = ProdutoAtualizado.Sku;
-            produto.Nome = ProdutoAtualizado.Nome;
-            produto.PrecoVenda = ProdutoAtualizado.PrecoVenda;
-            produto.EstoqueAtual = ProdutoAtualizado.EstoqueAtual;
-            produto.Ativo = ProdutoAtualizado.Ativo;
+            produto.Sku = request.Sku;
+            produto.Nome = request.Nome;
+            produto.PrecoVenda = request.PrecoVenda;
+            produto.EstoqueAtual = request.EstoqueAtual;
+            produto.Ativo = request.Ativo;
 
             await _context.SaveChangesAsync();
 
