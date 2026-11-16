@@ -13,6 +13,7 @@ namespace MiniErp.Infrastructure.Data
         }
 
         public DbSet<Produto> Produtos { get; set; }
+        public DbSet<Categoria> Categorias { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -22,6 +23,16 @@ namespace MiniErp.Infrastructure.Data
                 entity.Property(p => p.Nome).IsRequired().HasMaxLength(150);
                 entity.Property(p => p.PrecoVenda).HasPrecision(18, 2);
                 entity.HasIndex(p => p.Sku).IsUnique();
+
+                entity.HasOne(p => p.Categoria).WithMany().HasForeignKey(p => p.CategoriaId);
+
+            });
+
+            modelBuilder.Entity<Categoria>(entity =>
+            {
+                entity.Property(p => p.Nome).IsRequired().HasMaxLength(100);
+                entity.Property(p => p.Descricao).HasMaxLength(250);
+                entity.HasIndex(p => p.Nome).IsUnique();
             });
         }
     }

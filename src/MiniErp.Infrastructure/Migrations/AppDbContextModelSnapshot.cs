@@ -21,6 +21,34 @@ namespace MiniErp.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("MiniErp.Domain.Entities.Categoria", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("Ativa")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Descricao")
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Nome")
+                        .IsUnique();
+
+                    b.ToTable("Categorias");
+                });
+
             modelBuilder.Entity("MiniErp.Domain.Entities.Produto", b =>
                 {
                     b.Property<int>("Id")
@@ -31,6 +59,9 @@ namespace MiniErp.Infrastructure.Migrations
 
                     b.Property<bool>("Ativo")
                         .HasColumnType("bit");
+
+                    b.Property<int?>("CategoriaId")
+                        .HasColumnType("int");
 
                     b.Property<int>("EstoqueAtual")
                         .HasColumnType("int");
@@ -51,10 +82,21 @@ namespace MiniErp.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CategoriaId");
+
                     b.HasIndex("Sku")
                         .IsUnique();
 
                     b.ToTable("Produtos");
+                });
+
+            modelBuilder.Entity("MiniErp.Domain.Entities.Produto", b =>
+                {
+                    b.HasOne("MiniErp.Domain.Entities.Categoria", "Categoria")
+                        .WithMany()
+                        .HasForeignKey("CategoriaId");
+
+                    b.Navigation("Categoria");
                 });
 #pragma warning restore 612, 618
         }
