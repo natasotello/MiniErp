@@ -33,5 +33,53 @@ namespace MiniErp.Api.Controllers
 
             return Ok(response);
         }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<CategoriaResponse>> BuscarPorId(int id)
+        {
+            var categoria = await _context.Categorias.FirstOrDefaultAsync(c => c.Id == id);
+
+            if(categoria == null)
+            {
+                return NotFound();
+            }
+
+            var response = new CategoriaResponse
+            {
+                Id = categoria.Id,
+                Nome = categoria.Nome,
+                Descricao = categoria.Descricao,
+                Ativa = categoria.Ativa
+
+            };
+
+            return Ok(response);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<CategoriaResponse>> CriarCategoria(CriarCategoriaRequest request)
+        {
+            var categoria = new Categoria
+            {
+                Nome = request.Nome,
+                Descricao = request.Descricao,
+                Ativa = request.Ativa
+
+            };
+
+            _context.Categorias.Add(categoria);
+            await _context.SaveChangesAsync();
+
+            var response = new CategoriaResponse
+            {
+                Id = categoria.Id,
+                Nome = categoria.Nome,
+                Descricao = categoria.Descricao,
+                Ativa = categoria.Ativa
+
+            };
+
+            return CreatedAtAction(nameof(BuscarPorId), new { id = categoria.Id }, response);
+        }
     }
 }
