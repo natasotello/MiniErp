@@ -9,5 +9,6 @@ namespace MiniErp.Api.Dtos
         public decimal PrecoVenda { get; set; }
         public int EstoqueAtual { get; set; }
         public bool Ativo { get; set; }
+        public int? CategoriaId { get; set; }
     }
 }
