@@ -15,6 +15,7 @@ namespace MiniErp.Infrastructure.Data
         public DbSet<Produto> Produtos { get; set; }
         public DbSet<Categoria> Categorias { get; set; }
         public DbSet<Fornecedor> Fornecedores { get; set; }
+        public DbSet<MovimentacaoEstoque> MovimentacoesEstoque { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -44,6 +45,14 @@ namespace MiniErp.Infrastructure.Data
                 entity.HasIndex(p => p.Cnpj).IsUnique();
                 entity.Property(p => p.Email).HasMaxLength(150);
                 entity.Property(p => p.Telefone).HasMaxLength(20);
+            });
+
+            modelBuilder.Entity<MovimentacaoEstoque>(entity =>
+            {
+                entity.HasOne(m => m.Produto).WithMany()
+                      .HasForeignKey(m => m.ProdutoId)
+                      .OnDelete(DeleteBehavior.Restrict);
+                entity.Property(m => m.Observacao).HasMaxLength(250);
             });
         }
     }
