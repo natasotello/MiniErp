@@ -49,6 +49,45 @@ namespace MiniErp.Infrastructure.Migrations
                     b.ToTable("Categorias");
                 });
 
+            modelBuilder.Entity("MiniErp.Domain.Entities.Fornecedor", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("Ativo")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Cnpj")
+                        .IsRequired()
+                        .HasMaxLength(14)
+                        .HasColumnType("nvarchar(14)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<string>("RazaoSocial")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<string>("Telefone")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Cnpj")
+                        .IsUnique();
+
+                    b.ToTable("Fornecedores");
+                });
+
             modelBuilder.Entity("MiniErp.Domain.Entities.Produto", b =>
                 {
                     b.Property<int>("Id")
@@ -64,6 +103,9 @@ namespace MiniErp.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("EstoqueAtual")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("FornecedorId")
                         .HasColumnType("int");
 
                     b.Property<string>("Nome")
@@ -84,6 +126,8 @@ namespace MiniErp.Infrastructure.Migrations
 
                     b.HasIndex("CategoriaId");
 
+                    b.HasIndex("FornecedorId");
+
                     b.HasIndex("Sku")
                         .IsUnique();
 
@@ -96,7 +140,13 @@ namespace MiniErp.Infrastructure.Migrations
                         .WithMany()
                         .HasForeignKey("CategoriaId");
 
+                    b.HasOne("MiniErp.Domain.Entities.Fornecedor", "Fornecedor")
+                        .WithMany()
+                        .HasForeignKey("FornecedorId");
+
                     b.Navigation("Categoria");
+
+                    b.Navigation("Fornecedor");
                 });
 #pragma warning restore 612, 618
         }

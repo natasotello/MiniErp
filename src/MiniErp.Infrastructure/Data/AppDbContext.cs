@@ -14,6 +14,7 @@ namespace MiniErp.Infrastructure.Data
 
         public DbSet<Produto> Produtos { get; set; }
         public DbSet<Categoria> Categorias { get; set; }
+        public DbSet<Fornecedor> Fornecedores { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -26,6 +27,7 @@ namespace MiniErp.Infrastructure.Data
 
                 entity.HasOne(p => p.Categoria).WithMany().HasForeignKey(p => p.CategoriaId);
 
+                entity.HasOne(p => p.Fornecedor).WithMany().HasForeignKey(p => p.FornecedorId);
             });
 
             modelBuilder.Entity<Categoria>(entity =>
@@ -33,6 +35,15 @@ namespace MiniErp.Infrastructure.Data
                 entity.Property(p => p.Nome).IsRequired().HasMaxLength(100);
                 entity.Property(p => p.Descricao).HasMaxLength(250);
                 entity.HasIndex(p => p.Nome).IsUnique();
+            });
+
+            modelBuilder.Entity<Fornecedor>(entity =>
+            {
+                entity.Property(p => p.RazaoSocial).IsRequired().HasMaxLength(150);
+                entity.Property(p => p.Cnpj).IsRequired().HasMaxLength(14);
+                entity.HasIndex(p => p.Cnpj).IsUnique();
+                entity.Property(p => p.Email).HasMaxLength(150);
+                entity.Property(p => p.Telefone).HasMaxLength(20);
             });
         }
     }

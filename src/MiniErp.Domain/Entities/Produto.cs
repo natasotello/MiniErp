@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
+﻿
 namespace MiniErp.Domain.Entities
 {
     public class Produto
@@ -14,5 +11,7 @@ namespace MiniErp.Domain.Entities
         public bool Ativo { get; set; }
         public int? CategoriaId { get; set; }
         public Categoria? Categoria { get; set; }
+        public int? FornecedorId { get; set; }
+        public Fornecedor? Fornecedor { get; set; }
     }
 }
