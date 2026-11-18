@@ -30,7 +30,8 @@ namespace MiniErp.Api.Controllers
                 PrecoVenda = p.PrecoVenda,
                 EstoqueAtual = p.EstoqueAtual,
                 Ativo = p.Ativo,
-                CategoriaId = p.CategoriaId
+                CategoriaId = p.CategoriaId,
+                FornecedorId = p.FornecedorId,
 
             }).ToList();
 
@@ -55,7 +56,8 @@ namespace MiniErp.Api.Controllers
                 PrecoVenda = produto.PrecoVenda,
                 EstoqueAtual = produto.EstoqueAtual,
                 Ativo = produto.Ativo,
-                CategoriaId = produto.CategoriaId
+                CategoriaId = produto.CategoriaId,
+                FornecedorId = produto.FornecedorId
             };
 
             return Ok(response);
@@ -71,7 +73,8 @@ namespace MiniErp.Api.Controllers
                 PrecoVenda = request.PrecoVenda,
                 EstoqueAtual = request.EstoqueAtual,
                 Ativo = request.Ativo,
-                CategoriaId = request.CategoriaId                
+                CategoriaId = request.CategoriaId,
+                FornecedorId = request.FornecedorId
             };
 
             _context.Produtos.Add(produto);
@@ -85,7 +88,8 @@ namespace MiniErp.Api.Controllers
                 PrecoVenda = produto.PrecoVenda,
                 EstoqueAtual = produto.EstoqueAtual,
                 Ativo = produto.Ativo,
-                CategoriaId = produto.CategoriaId
+                CategoriaId = produto.CategoriaId,
+                FornecedorId = produto.FornecedorId
             };
 
             return CreatedAtAction(nameof(BuscarPorId), new { id = produto.Id }, response);
@@ -108,6 +112,7 @@ namespace MiniErp.Api.Controllers
             produto.EstoqueAtual = request.EstoqueAtual;
             produto.Ativo = request.Ativo;
             produto.CategoriaId = request.CategoriaId;
+            produto.FornecedorId = request.FornecedorId;
 
             await _context.SaveChangesAsync();
 
