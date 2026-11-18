@@ -71,7 +71,7 @@ namespace MiniErp.Api.Controllers
                 Sku = request.Sku,
                 Nome = request.Nome,
                 PrecoVenda = request.PrecoVenda,
-                EstoqueAtual = request.EstoqueAtual,
+                EstoqueAtual = 0,
                 Ativo = request.Ativo,
                 CategoriaId = request.CategoriaId,
                 FornecedorId = request.FornecedorId
@@ -109,7 +109,6 @@ namespace MiniErp.Api.Controllers
             produto.Sku = request.Sku;
             produto.Nome = request.Nome;
             produto.PrecoVenda = request.PrecoVenda;
-            produto.EstoqueAtual = request.EstoqueAtual;
             produto.Ativo = request.Ativo;
             produto.CategoriaId = request.CategoriaId;
             produto.FornecedorId = request.FornecedorId;
