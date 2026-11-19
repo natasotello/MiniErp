@@ -128,6 +128,12 @@ namespace MiniErp.Api.Controllers
                 return NotFound();
             }
 
+            if (await _context.MovimentacoesEstoque.AnyAsync(m => m.ProdutoId == id))
+            {
+                return Conflict(
+                    "Não é possível excluir um produto com histórico de movimentações.");
+            }
+
             _context.Produtos.Remove(produto);
             await _context.SaveChangesAsync();
 
